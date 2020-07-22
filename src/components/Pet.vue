@@ -1,73 +1,72 @@
 <template>
-    <Card lefty='true'>
-        <div class='petAvatar'>
-            <Data class='profile-pic'>
-                <img v-if='images[type]' :src='require(`@/assets/${images[type].src}`)' alt="profilePic">
-                <img v-else src='@/assets/biscuit.png' >
-            </Data>
-            <Data class='data' label='Name'>{{ name }}</Data>
-            <Data class='data' label='Type'>{{ capitalize(type) }}</Data>
-            <Data class='data' label='Race'>{{ race }}</Data>
-            <Data class='data' label='Age'>{{ age }}</Data>
-            <router-link to='404'>Edit</router-link>
+    <Card class='changeDim' lefty='true'>
+        <div class='petCard'>
+            <transition name="fade" mode='out-in'>
+                <PetData :name='name' :type='type' :race='race' :age='age' v-if='!edit'></PetData>
+                <PetForm v-if='edit'></PetForm>
+            </transition>
+            <button @click='onClick'>{{ this.edit ? 'Confirm' : 'Edit' }} </button>
         </div>
     </Card>
 </template>
 
 <script>
-import Data from '@/components/Data'
+import PetForm from '@/components/PetForm'
+import PetData from '@/components/PetData'
 import Card from '@/components/Card'
 
-const images = {
-    dog: {src: 'doggy.png', alt:'pic'},
-    cat: {src: 'cat.png', alt:'pic'},
-    bird: {src: 'bird.png', alt:'pic'},
-    fish: {src: 'fish.png', alt:'pic'}
-}
-
 export default {
-    name: 'Pet',
     components: {
-        Data,
-        Card
+        Card,
+        PetForm,
+        PetData
     },
     props: ['name', 'type', 'race', 'age'],
     data: () => ({
-        images
+        edit: false
     }),
     methods: {
-        capitalize: str => str.charAt(0).toUpperCase() + str.slice(1)
+        onClick() {
+            this.edit = !this.edit
+        }
     }
 }
 </script>
 
 <style scoped>
-.petAvatar{
+.changeDim{
+    height: 80vh;
+    width:  45vw;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .3s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active em versões anteriores a 2.1.8 */ {
+  opacity: 0;
+}
+
+.petCard{
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
 }
 
-.petAvatar *{
+.petCard *{
   margin: 10px;
   padding: 5px;
 }
-.petAvatar img{
-  max-width: 200px;
-  max-height: 200px;
-}
-
 
 /* Reducing the space between the label and the data */
-.petAvatar .data ::v-deep h3{
+.petCard .data ::v-deep h3{
     margin-right: 0px;
 }
-.petAvatar .data ::v-deep p{
+.petCard .data ::v-deep p{
     margin-left: 0px;
 }
 
-.petAvatar a{
+.petCard button{
   background: var(--secondarycolor);
   width: 100%;
   border: none;
@@ -77,7 +76,7 @@ export default {
   font-weight: 500;
   cursor: pointer;
 }
-.petAvatar a:hover{
+.petCard button:hover{
   filter: brightness(1.2);
 }
 </style>

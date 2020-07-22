@@ -17,10 +17,6 @@
             <input type='text' name='phone' pattern='[0-9\(\)\- ]{16}' placeholder='(DD) 9 XXXX-XXXX' required />
         </div>
         <div class='inputwrap'>
-            <h3>Profile pic:</h3>
-            <input type='file' name='image' required />
-        </div>
-        <div class='inputwrap'>
             <h3>Password:</h3>
             <input type='password' name='passwd' min='6' required />
         </div>
